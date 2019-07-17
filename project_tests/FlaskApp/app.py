@@ -1,6 +1,8 @@
-from flask import Flask, session
+from flask import Flask, session, redirect, url_for, escape, request
 import models
 app = Flask(__name__)
+app.secret_key = b'ITMGT25'
+app.config['SESSION_TYPE'] = 'filesystem'
 
 
 @app.route('/')
