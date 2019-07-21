@@ -48,7 +48,7 @@ def orders():
         <form method="POST">
         Enter Quantity: <input type="number" name="qtyAmr"/><br/>
         <input type="submit" name="americano" value="americano"/><br/>
-        <input type="submit" name="Remove" value = "Remove"/><input type="number" name="remAmr"/><br/>
+        <input type="submit" name="Remove Americano" value = "remove_amr"/><input type="number" name="remAmr"/><br/>
         
         Enter Quantity: <input type="number" name="qtyBre"/><br/>
         <input type="submit" name="brewed" value="brewed"/><br/>
@@ -94,10 +94,10 @@ def orders():
         if request.form.get('americano') == 'americano':
             code = "americano"
             qty=request.form.get("qtyAmr")
+        elif request.form.get("Remove") == 'remove_amr':
             rem=request.form.get("remAmr")
-            if request.form.get("Remove") == 'Remove' and int(rem) > 0:
-                qty=-(int(rem))
-                
+            qty=-(int(rem))
+            code = "americano"
         elif request.form.get('brewed') == 'brewed':
             code = "brewed"
             qty=request.form.get("qtyBre")
@@ -261,6 +261,7 @@ def summary():
     food_tray_string = ["<tr><td>{}</td><td>{}</td><td>{}</td></tr>".format(i["code"],i["quantity"],i["price"]) for i in food_tray]
     food_tray_final = '<table><tr><th>Code</th><th>Quantity</th><th>Price</th></tr>{}</table>'.format(food_tray_string)
     
+
     link4 = '<div> {} | </div>'.format('<a href="orders">Go back to Orders</a>')
     link5 = '<div> {} | </div>'.format('<a href="cinfo">Go back to Customer Information</a>')
     link6 = '<div> {} | </div>'.format('<a href="checkout">Proceed to Checkout</a>')

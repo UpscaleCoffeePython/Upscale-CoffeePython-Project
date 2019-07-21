@@ -48,7 +48,7 @@ def orders():
         <form method="POST">
         Enter Quantity: <input type="number" name="qtyAmr"/><br/>
         <input type="submit" name="americano" value="americano"/><br/>
-        <input type="submit" name="Remove" value = "Remove"/><input type="number" name="remAmr"/><br/>
+        <input type="submit" name="Remove Americano" value = "remove_amr"/><input type="number" name="remAmr"/><br/>
         
         Enter Quantity: <input type="number" name="qtyBre"/><br/>
         <input type="submit" name="brewed" value="brewed"/><br/>
@@ -86,6 +86,8 @@ def orders():
         '''
 
     food_tray = []
+    code = "brewed"
+    qty = 0
     if 'food_tray' not in session:
         session['food_tray'] = []
     else:
@@ -94,10 +96,10 @@ def orders():
         if request.form.get('americano') == 'americano':
             code = "americano"
             qty=request.form.get("qtyAmr")
+        elif request.form.get("Remove Americano") == 'remove_amr':
             rem=request.form.get("remAmr")
-            if request.form.get("Remove") == 'Remove' and int(rem) > 0:
-                qty=-(int(rem))
-                
+            qty=-(int(rem))
+            code = "americano"
         elif request.form.get('brewed') == 'brewed':
             code = "brewed"
             qty=request.form.get("qtyBre")
@@ -220,7 +222,9 @@ def cinfo():
     
     message_after_string = ["<div>{}</div>".format(i["message"]) for i in message_after]
     
-    return html + instruc3 + required + form + "".join(customer_info_string) + "".join(message_after_string)
+    link3 = '<div> {} | </div>'.format('<a href="summary">Proceed to Summary</a>')
+    
+    return html + instruc3 + required + form + "".join(customer_info_string) + "".join(message_after_string) + link3
 
 if __name__ == '__main__':
     app.config['SESSION_TYPE'] = 'filesystem'
@@ -242,3 +246,29 @@ if __name__ == '__main__':
            # </table>
         #</div>
     #tray.format(food_tray)
+    
+    
+#-------------------------------------------------------------------------------------------------
+    # Attempt to process 4th Page
+    
+@app.route('/summary', methods = ['GET','POST'])
+def summary():
+    html = "<html><h1>Order Summary</h1></html>"
+    instruc4 = "<h4>Kindly check the following information</h4>"
+        
+    customer_info = session['customer_info']
+    customer_info_string = ["<div>Name: {}&nbsp;{}<br/>Email Address: {}<br/>Phone Number: {}<br/>Address: {}</div>".format(i["fname"],i["lname"],i["email"],i["cnumber"],i["address"]) for i in customer_info]
+        
+    food_tray = session['food_tray']
+    food_tray_string = ["<tr><td>{}</td><td>{}</td><td>{}</td></tr>".format(i["code"],i["quantity"],i["price"]) for i in food_tray]
+    food_tray_final = '<table><tr><th>Code</th><th>Quantity</th><th>Price</th></tr>{}</table>'.format(food_tray_string)
+    
+    link4 = '<div> {} | </div>'.format('<a href="orders">Go back to Orders</a>')
+    link5 = '<div> {} | </div>'.format('<a href="cinfo">Go back to Customer Information</a>')
+    link6 = '<div> {} | </div>'.format('<a href="checkout">Proceed to Checkout</a>')
+    
+    return html + instruc4 + "".join(customer_info_string) + "".join(food_tray_final) + link4 + link5 + link6
+
+if __name__ == '__main__':
+    app.config['SESSION_TYPE'] = 'filesystem'
+    app.run(debug=True, port = 5678)
