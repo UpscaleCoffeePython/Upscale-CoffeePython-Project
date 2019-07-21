@@ -43,7 +43,7 @@ def orders():
         #<input type="submit"/>
         #</form>
         #'''
-    instruc2 = "<h4>Please choose a quantity first then click the product.</h4>"
+    instruc2 = "<h4>Please enter a Quantity FIRST then click the Product.</h4>"
     form = '''
         <form method="POST">
         Enter Quantity: <input type="number" name="qtyAmr"/><br/>
