@@ -156,9 +156,9 @@ if __name__ == '__main__':
 @app.route('/cinfo', methods = ['GET','POST'])
 def cinfo():
     html = "<html><h1>Customer Information</h1></html>"
-    instruc3 = "<h4>Kindly input the following information</h4>"
-    required = "<h5>All fields are required</h5>"
-    message = "<h4>Thank You for submitting your information!</h4>"
+    instruc3 = "<h4>Kindly input the following information.</h4>"
+    required = "<h5>*All fields are required.</h5>"
+    message = "<h4>Thank you for submitting your information!</h4>"
 
     form = '''
         <form method="POST">
