@@ -104,7 +104,7 @@ def cinfo():
     # print(session)
     print(customer_info)
     
-    customer_info_string = ["<div>{}-{}-{}-{}-{}</div>".format(i["fname"],i["lname"],i["email"],i["cnumber"],i["address"]) for i in customer_info]
+    customer_info_string = ["<div>{}&nbsp;{}<br/>{}<br/>{}<br/>{}</div>".format(i["fname"],i["lname"],i["email"],i["cnumber"],i["address"]) for i in customer_info]
 
     ####
     
