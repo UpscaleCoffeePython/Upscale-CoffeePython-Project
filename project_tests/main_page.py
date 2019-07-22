@@ -86,7 +86,8 @@ font-family: Quicksand}
     instruc2 = "<h4>Please choose a quantity first then click the product.</h4>"
     form = '''
         <form method="POST">
-        <input type="number" name="qty" required="required" placeholder="Qty"/><br/>
+        <input type="number" name="qty" min="1" placeholder="Quantity"/><br/>
+        <input type="number" name="rem" min="1" placeholder="Quantity"/><br/>
         <br/>
         <input type="submit" name="americano" value="americano"/>
         <input type="submit" name="brewed" value="brewed"/>
@@ -117,7 +118,11 @@ font-family: Quicksand}
         
         if request.form.get('americano') == 'americano':
             code = "americano"
-            qty=request.form.get("qty")
+            #qty=request.form.get("qty")
+            if request.form.get("qty") != '':
+                qty=int(request.form.get("qty"))
+            elif request.form.get("rem") != '':
+                qty=-int(request.form.get("rem"))
         elif request.form.get('brewed') == 'brewed':
             code = "brewed"
             qty=request.form.get("qty")
