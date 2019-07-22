@@ -86,8 +86,8 @@ font-family: Quicksand}
     instruc2 = "<h4>Please choose a quantity first then click the product.</h4>"
     form = '''
         <form method="POST">
-        <input type="number" name="qty" min="1" placeholder="Quantity"/><br/>
-        <input type="number" name="rem" min="1" placeholder="Quantity"/><br/>
+        <input type="number" name="qty" min="1" placeholder="Qty"/><br/>
+        <input type="number" name="rem" min="1" placeholder="Rmv"/><br/>
         <br/>
         <input type="submit" name="americano" value="americano"/>
         <input type="submit" name="brewed" value="brewed"/>
