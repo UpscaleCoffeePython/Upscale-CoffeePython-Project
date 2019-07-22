@@ -125,37 +125,70 @@ font-family: Quicksand}
                 qty=-int(request.form.get("rem"))
         elif request.form.get('brewed') == 'brewed':
             code = "brewed"
-            qty=request.form.get("qty")
+            if request.form.get("qty") != '':
+                qty=int(request.form.get("qty"))
+            elif request.form.get("rem") != '':
+                qty=-int(request.form.get("rem"))
         elif request.form.get('cappuccino') == 'cappuccino':
             code = "cappuccino"
-            qty=request.form.get("qty")
+            if request.form.get("qty") != '':
+                qty=int(request.form.get("qty"))
+            elif request.form.get("rem") != '':
+                qty=-int(request.form.get("rem"))
         elif request.form.get('espresso') == 'espresso':
             code = "espresso"
-            qty=request.form.get("qty")
+            if request.form.get("qty") != '':
+                qty=int(request.form.get("qty"))
+            elif request.form.get("rem") != '':
+                qty=-int(request.form.get("rem"))
         elif request.form.get('latte') == 'latte':
             code = "latte"
-            qty=request.form.get("qty")
+            if request.form.get("qty") != '':
+                qty=int(request.form.get("qty"))
+            elif request.form.get("rem") != '':
+                qty=-int(request.form.get("rem"))
         elif request.form.get('frappuccino') == 'frappuccino':
             code = "frappuccino"
-            qty=request.form.get("qty")
+            if request.form.get("qty") != '':
+                qty=int(request.form.get("qty"))
+            elif request.form.get("rem") != '':
+                qty=-int(request.form.get("rem"))
         elif request.form.get('mocha') == 'mocha':
             code = "mocha"
-            qty=request.form.get("qty")
+            if request.form.get("qty") != '':
+                qty=int(request.form.get("qty"))
+            elif request.form.get("rem") != '':
+                qty=-int(request.form.get("rem"))
         elif request.form.get('macchiato') == 'macchiato':
             code = "macchiato"
-            qty=request.form.get("qty")
+            if request.form.get("qty") != '':
+                qty=int(request.form.get("qty"))
+            elif request.form.get("rem") != '':
+                qty=-int(request.form.get("rem"))
         elif request.form.get('affogato') == 'affogato':
             code = "affogato"
-            qty=request.form.get("qty")
+            if request.form.get("qty") != '':
+                qty=int(request.form.get("qty"))
+            elif request.form.get("rem") != '':
+                qty=-int(request.form.get("rem"))
         elif request.form.get('cortado') == 'cortado':
             code = "cortado"
-            qty=request.form.get("qty")
+            if request.form.get("qty") != '':
+                qty=int(request.form.get("qty"))
+            elif request.form.get("rem") != '':
+                qty=-int(request.form.get("rem"))
         elif request.form.get('black') == 'black':
             code = "black"
-            qty=request.form.get("qty")
+            if request.form.get("qty") != '':
+                qty=int(request.form.get("qty"))
+            elif request.form.get("rem") != '':
+                qty=-int(request.form.get("rem"))
         elif request.form.get('iced') == 'iced':
             code = "iced"
-            qty=request.form.get("qty")
+            if request.form.get("qty") != '':
+                qty=int(request.form.get("qty"))
+            elif request.form.get("rem") != '':
+                qty=-int(request.form.get("rem"))
 
         prc=int(qty)*coffee_dict.products_dict[code]["price"]
         food_tray.append({"code":code,"quantity":qty,"price":prc})
