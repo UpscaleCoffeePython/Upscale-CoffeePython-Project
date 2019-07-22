@@ -40,12 +40,33 @@ def index():
 def orders():
     html = """<html><style>
     body {background-color: #f5edda; text-align:center}
+    div {font-family: Quicksand; text-align: center }
     h1, h2, h3, h4 { font-family: Quicksand; text-align: center }
     table {border-collapse: collapse; font-family: Quicksand} table, th, td { border: 1px solid black; padding: 5px; text-align: center}
     input[type=submit] {align: middle; background-color: #CA9E7B; color: #F5EDDA; border: none; padding: 5px; margin: 4px 2px; font-family: Quicksand; border-radius: 25px;} 
-    input[type=submit]:hover {background-color: #F5EDDA; color: #363636; border-radius: 25px;} </style>
+    input[type=submit]:hover {background-color: #F5EDDA; color: #363636; border-radius: 25px;} 
+    
+    input[type=number] {
+  width: 100px;
+  box-sizing: border-box;
+  border: 2px solid #98694f;
+  border-radius: 25px;
+  background-color: #f5edda;
+  background-repeat: no-repeat;
+  padding: 5px 20px 5px 20px;
+  -webkit-transition: width 0.4s ease-in-out;
+  transition: width 0.4s ease-in-out;
+}
+
+    input[type=number]::placeholder {
+color: #98694f;
+font-family: Quicksand}
+
+    
+    </style>
     <br/>
     <h1>Coffee Python Order</h1></html>"""
+    
     instruc = "<h4>Kindly Input Code and Quantity from Menu</h4>"
     menu_title2 = '<div> <h2> Coffee Python Menu </h2> '
     
@@ -65,7 +86,7 @@ def orders():
     instruc2 = "<h4>Please choose a quantity first then click the product.</h4>"
     form = '''
         <form method="POST">
-        Quantity: <input type="number" name="qty"/><br/>
+        <input type="number" name="qty" required="required" placeholder="Qty"/><br/>
         <br/>
         <input type="submit" name="americano" value="americano"/>
         <input type="submit" name="brewed" value="brewed"/>
