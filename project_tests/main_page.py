@@ -206,8 +206,8 @@ font-family: Quicksand}
     food_tray_string = ["<div>{}-{}-{}</div>".format(i["code"],i["quantity"],i["price"]) for i in food_tray]
     
     link2 = '<div> {} </div>'.format('<a href="cinfo">Proceed to Customer Information</a>')
-    
-    return html + instruc2 + menu_title2 + menu2 + form + "".join(food_tray_string) + link2
+    link7 = '<div> {} </div>'.format('<a href="summary">Proceed to Summary</a>')
+    return html + instruc2 + menu_title2 + menu2 + form + "".join(food_tray_string) + link2 +link7
 
 if __name__ == '__main__':
     app.config['SESSION_TYPE'] = 'filesystem'
