@@ -346,16 +346,53 @@ def summary():
         
     customer_info = session['customer_info']
     customer_info_string = ["<br/><div>Name: {}&nbsp;{}<br/>Email Address: {}<br/>Phone Number: {}<br/>Address: {}</div><br/>".format(i["fname"],i["lname"],i["email"],i["cnumber"],i["address"]) for i in customer_info]
-        
+    
     food_tray = session['food_tray']
     food_tray_string = ["<tr><td>{}</td><td>{}</td><td>{}</td></tr>".format(i["code"],i["quantity"],i["price"]) for i in food_tray]
     food_tray_final = '<table align="center"><tr><th>Code</th><th>Quantity</th><th>Price</th></tr>{}</table><br/>'.format(food_tray_string)
+    total_payment = 0
+    for i in food_tray:
+        #subtotals = next((item.get('price') for item in session['food_tray'][i]), False)
+        subtotals = int(i["price"])
+        total_payment += subtotals
     
+    food_tray_total = '<div> Total Amount of your Order is: {}'.format(total_payment)    
+
+    form = '''
+        <form method = "POST">
+        <input type="number" name="amount" required="required" min="1" placeholder="Amount"/>
+        <input type="submit"/>
+        </form>
+    '''
+    
+    balance = []
+    if "balance" not in session:
+        balance = []
+    else:
+        balance = session["balance"]
+        amount = request.form.get("amount")
+        change = int(amount) - int(total_payment)
+        balance.append({"change":change})
+        session["balance"] = balance
+
+    print(balance)
+    
+    change_text = ["<div> The Change from your Inputted Amount is: {}</div>".format(i["change"]) for i in balance]
+    
+    #if balance == []:
+        #change_text = '<div> You have a pending balance of: {}'.format(total_payment)
+    #else:
+        #amountGiven=next((item.get('amount_given') for item in session['balance'] if item["amount_given"] == amount), False)
+        #change = int(amountGiven) - int(total_payment)
+        #change_text = '<div> The Change from your Inputted Amount is: {}'.format(change)
+
+    
+
     link4 = '<div> {} </div>'.format('<a href="orders">Go back to Orders</a>')
     link5 = '<div> {} </div>'.format('<a href="cinfo">Go back to Customer Information</a>')
     link6 = '<div> {} </div>'.format('<a href="checkout">Proceed to Checkout</a>')
     
-    return html + instruc4 + "".join(customer_info_string) + "".join(food_tray_final) + link4 + link5 + link6
+    return html + instruc4 + "".join(customer_info_string) + "".join(food_tray_final) + form + food_tray_total + ''.join(change_text) + link4 + link5 + link6
 
 if __name__ == '__main__':
     app.config['SESSION_TYPE'] = 'filesystem'
