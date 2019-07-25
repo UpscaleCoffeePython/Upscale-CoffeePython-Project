@@ -197,22 +197,49 @@ font-family: Quicksand}
                 qty=-int(request.form.get("rem"))
         sub_total=0
         prc=int(qty)*coffee_dict.products_dict[code]["price"]
-        checker=next((item.get('code') for item in session['food_tray'] if item["code"] == code), False)
-        checker_quan=next((item.get('quantity') for item in session['food_tray'] if item["code"] == code), False)
-        if checker == code:
-            sub_total=qty+int(checker_quan)
-            new_prc=int(sub_total)*coffee_dict.products_dict[code]["price"]
-            for i in range(len(food_tray)):
-                if food_tray[i]['code'] == checker:
-                    del food_tray[i]
-                    break
+        
+        checker=next((item.get('code') for item in session['food_tray'] if item["code"] == coffee_dict.products_dict[code]["name"]), False)
+        checker_quan=next((item.get('quantity') for item in session['food_tray'] if item["code"] == coffee_dict.products_dict[code]["name"]), False)
+        #if checker == code:
+            #sub_total=qty+int(checker_quan)
+            #new_prc=int(sub_total)*coffee_dict.products_dict[code]["price"]
+            #for i in range(len(food_tray)):
+                #if food_tray[i]['code'] == checker:
+                    #del food_tray[i]
+                    #break
+        if checker == coffee_dict.products_dict[code]["name"]:
+            if qty < 0 and -qty > int(checker_quan):
+                sub_total=0+int(checker_quan)
+                new_prc=int(sub_total)*coffee_dict.products_dict[code]["price"]
+                for i in range(len(food_tray)):
+                    if food_tray[i]['code'] == checker:
+                        del food_tray[i]
+                        break
+            else:
+                sub_total=qty+int(checker_quan)
+                new_prc=int(sub_total)*coffee_dict.products_dict[code]["price"]
+                for i in range(len(food_tray)):
+                    if food_tray[i]['code'] == checker:
+                        del food_tray[i]
+                        break
             #session['food_tray'].remove({"code":checker,"quantity":checker_quan,"price":prc})
             #for d in session['food_tray']:
-            food_tray.append({"code":code,"quantity":sub_total,"price":new_prc})
+            food_tray.append({"code":coffee_dict.products_dict[code]["name"],"quantity":sub_total,"price":new_prc})
             session['food_tray']=food_tray
-        elif checker != code:
-            food_tray.append({"code":code,"quantity":qty,"price":prc})
+        
+        elif checker != coffee_dict.products_dict[code]["name"]:
+            if qty < 0:
+                qty = 0
+                prc = 0
+            else:
+                qty = qty
+            food_tray.append({"code":coffee_dict.products_dict[code]["name"],"quantity":qty,"price":prc})
             session['food_tray']=food_tray
+        
+        for i in range(len(food_tray)):
+                    if food_tray[i]['quantity'] == 0:
+                        del food_tray[i]
+                        break
         
         session['food_tray']=food_tray
 
@@ -225,7 +252,7 @@ font-family: Quicksand}
     # print(session)
     print(food_tray)
     # print(models.products[request.form.get("code")]["name"])
-    food_tray_string = ["<div>{}-{}-{}</div><br/>".format(i["code"],i["quantity"],i["price"]) for i in food_tray]
+    food_tray_string = ["<div>Product: <b>{}</b> | Quantity: <b>{}</b> | Price: <b>{}</b></div><br/>".format(i["code"],i["quantity"],i["price"]) for i in food_tray]
     
     link2 = '<div> {} </div>'.format('<a href="cinfo" style="vertical-align:middle"><span>Proceed to Customer Information</span></a><br/>')
     link7 = '<div> {} </div>'.format('<a href="summary" style="vertical-align:middle"><span>Proceed to Summary</span></a>')
