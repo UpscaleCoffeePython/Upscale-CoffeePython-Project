@@ -87,7 +87,6 @@ font-family: Quicksand}
     form = '''
         <form method="POST">
         <input type="number" name="qty" min="1" placeholder="Qty"/><br/>
-        <input type="number" name="rem" min="1" placeholder="Rmv"/><br/>
         <br/>
         <input type="submit" name="americano" value="americano"/>
         <input type="submit" name="brewed" value="brewed"/>
@@ -103,6 +102,8 @@ font-family: Quicksand}
         <input type="submit" name="cortado" value="cortado"/>
         <input type="submit" name="black" value="black"/>
         <input type="submit" name="iced" value="iced"/><br/>
+        <br/>
+        <input type="number" name="rem" min="1" placeholder="Rmv"/><br/>
         </form>
         '''
 
@@ -191,22 +192,49 @@ font-family: Quicksand}
                 qty=-int(request.form.get("rem"))
         sub_total=0
         prc=int(qty)*coffee_dict.products_dict[code]["price"]
+        
         checker=next((item.get('code') for item in session['food_tray'] if item["code"] == code), False)
         checker_quan=next((item.get('quantity') for item in session['food_tray'] if item["code"] == code), False)
+        #if checker == code:
+            #sub_total=qty+int(checker_quan)
+            #new_prc=int(sub_total)*coffee_dict.products_dict[code]["price"]
+            #for i in range(len(food_tray)):
+                #if food_tray[i]['code'] == checker:
+                    #del food_tray[i]
+                    #break
         if checker == code:
-            sub_total=qty+int(checker_quan)
-            new_prc=int(sub_total)*coffee_dict.products_dict[code]["price"]
-            for i in range(len(food_tray)):
-                if food_tray[i]['code'] == checker:
-                    del food_tray[i]
-                    break
+            if qty < 0 and -qty >= int(checker_quan):
+                sub_total=0+int(checker_quan)
+                new_prc=int(sub_total)*coffee_dict.products_dict[code]["price"]
+                for i in range(len(food_tray)):
+                    if food_tray[i]['code'] == checker:
+                        del food_tray[i]
+                        break
+            else:
+                sub_total=qty+int(checker_quan)
+                new_prc=int(sub_total)*coffee_dict.products_dict[code]["price"]
+                for i in range(len(food_tray)):
+                    if food_tray[i]['code'] == checker:
+                        del food_tray[i]
+                        break
             #session['food_tray'].remove({"code":checker,"quantity":checker_quan,"price":prc})
             #for d in session['food_tray']:
             food_tray.append({"code":code,"quantity":sub_total,"price":new_prc})
             session['food_tray']=food_tray
+        
         elif checker != code:
+            if qty < 0:
+                qty = 0
+                prc = 0
+            else:
+                qty = qty
             food_tray.append({"code":code,"quantity":qty,"price":prc})
             session['food_tray']=food_tray
+        
+        for i in range(len(food_tray)):
+                    if food_tray[i]['quantity'] == 0:
+                        del food_tray[i]
+                        break
         
         session['food_tray']=food_tray
 
@@ -220,9 +248,11 @@ font-family: Quicksand}
     print(food_tray)
     # print(models.products[request.form.get("code")]["name"])
     food_tray_string = ["<div>{}-{}-{}</div>".format(i["code"],i["quantity"],i["price"]) for i in food_tray]
-    
+    #error_instruc = "<h4>Please add to cart first.</h4>"
+
     link2 = '<div> {} </div>'.format('<a href="cinfo">Proceed to Customer Information</a>')
     link7 = '<div> {} </div>'.format('<a href="summary">Proceed to Summary</a>')
+
     return html + instruc2 + menu_title2 + menu2 + form + "".join(food_tray_string) + link2 + link7
 
 if __name__ == '__main__':
@@ -358,26 +388,7 @@ def summary():
     
     food_tray_total = '<div> Total Amount of your Order is: {}'.format(total_payment)    
 
-    form = '''
-        <form method = "POST">
-        <input type="number" name="amount" required="required" min="1" placeholder="Amount"/>
-        <input type="submit"/>
-        </form>
-    '''
     
-    balance = []
-    if "balance" not in session:
-        balance = []
-    else:
-        balance = session["balance"]
-        amount = request.form.get("amount")
-        change = int(amount) - int(total_payment)
-        balance.append({"change":change})
-        session["balance"] = balance
-
-    print(balance)
-    
-    change_text = ["<div> The Change from your Inputted Amount is: {}</div>".format(i["change"]) for i in balance]
     
     #if balance == []:
         #change_text = '<div> You have a pending balance of: {}'.format(total_payment)
@@ -392,7 +403,7 @@ def summary():
     link5 = '<div> {} </div>'.format('<a href="cinfo">Go back to Customer Information</a>')
     link6 = '<div> {} </div>'.format('<a href="checkout">Proceed to Checkout</a>')
     
-    return html + instruc4 + "".join(customer_info_string) + "".join(food_tray_final) + form + food_tray_total + ''.join(change_text) + link4 + link5 + link6
+    return html + instruc4 + "".join(customer_info_string) + "".join(food_tray_final) + food_tray_total + link4 + link5 + link6
 
 if __name__ == '__main__':
     app.config['SESSION_TYPE'] = 'filesystem'
