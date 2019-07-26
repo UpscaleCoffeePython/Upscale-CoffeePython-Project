@@ -84,6 +84,7 @@ def interface():
     # Attempt to process 2nd Page
 @app.route('/orders', methods = ['GET','POST'])
 def orders():
+    session['food_tray'].clear()
     html = """<html><style>
     body {background-color: #f5edda; text-align:center}
     div {font-family: Quicksand; text-align: center; font-weight: 12px}
@@ -300,112 +301,8 @@ font-family: Quicksand}
     # print(models.products[request.form.get("code")]["name"])
     food_tray_string = ["<div>Product: <b>{}</b> | Quantity: <b>{}</b> | Price: <b>{}</b></div><br/>".format(i["code"],i["quantity"],i["price"]) for i in food_tray]
     
-    link2 = '<div> {} </div>'.format('<a href="cinfo" style="vertical-align:middle"><span>Proceed to Customer Information</span></a><br/>')
     link7 = '<div> {} </div>'.format('<a href="summary" style="vertical-align:middle"><span>Proceed to Summary</span></a>')
-    return html + instruc2 + menu_title2 + menu2 + form + "".join(food_tray_string) + link2 + link7
-#-------------------------------------------------------------------------------------------------
-    # Attempt to process 3rd Page
-@app.route('/cinfo', methods = ['GET','POST'])
-def cinfo():
-    html = """<html><style>
-    body {background-color: #f5edda; text-align:center}
-    div {font-family: Quicksand; text-align: center; font-weight: 12px}
-    h1, h2, h3, h4, h5 { font-family: Quicksand; text-align: center }
-    
-    input[type=text], input[type=email], input[type=number] {
-  width: 200px;
-  box-sizing: border-box;
-  border: 2px solid #98694f;
-  border-radius: 25px;
-  background-color: #f5edda;
-  background-repeat: no-repeat;
-  padding: 12px 20px 12px 30px;
-  -webkit-transition: width 0.4s ease-in-out;
-  transition: width 0.4s ease-in-out;
-}
-
-    input[type=submit] {align: middle; background-color: #CA9E7B; color: #F5EDDA; border: none; padding: 5px; margin: 4px 2px; font-family: Quicksand; border-radius: 25px;} 
-    input[type=submit]:hover {background-color: #F5EDDA; color: #363636; border-radius: 25px;} 
-
-    input[type=text]::placeholder, input[type=email]::placeholder, input[type=number]::placeholder {
-    color: #98694f;
-    font-family: Quicksand;}
-
-    input[type=text]:focus, input[type=email]:focus, input[type=number]:focus {
-  width: 50%;
-}
-    
-    a:link, a:visited {display: inline-block; border-radius: 4px; background-color: #66462f; border: none; color: #f5edda; text-align: center; font-size: 12px; padding: 10px; width: 250px; transition: all 0.5s; cursor: pointer; margin: 5px; font-family: Quicksand;}
-    a:link span {cursor: pointer; display: inline-block; position: relative; transition: 0.5s;}
-    a:link span:after {font-size: 8px; content: '>>'; position: absolute; opacity: 0; top: 2px;right: -40px; transition: 0.5s;}
-    a:hover span {padding-right: 25px;}
-    a:hover span:after {opacity: 1;right: -10px;}
-    
-    </style>
-    <br/>
-    <h1>Customer Information</h1></html>"""
-    instruc3 = "<h4>Kindly input the following information</h4>"
-    required = "<h5>All fields are required</h5>"
-    message = "<h4>Thank You for submitting your information!</h4>"
-
-    form = '''
-        <form method="POST">
-        <input type="text" name="fname" required="required" placeholder="First Name..."/><br/><br/>
-        <input type="text" name="lname" required="required" placeholder="Last Name..."/><br/><br/>
-        <input type="email" name="email" required="required" placeholder="Email..."/><br/><br/>
-        <input type="number" name="cnumber" required="required" placeholder="Contact Number..."/><br/><br/>
-        <input type="text" name="address" required="required" placeholder="Delivery Address..."/><br/><br/>
-        <input type="submit"/>
-        </form>
-        '''
-        
-    customer_info = []
-    if 'customer_info' not in session:
-        session['customer_info'] = []
-    else:
-        customer_info = session['customer_info']
-        fname=request.form.get("fname")
-        lname=request.form.get("lname")
-        email=request.form.get("email")
-        cnumber=request.form.get("cnumber")
-        address=request.form.get("address")
-        # message="Thank You for submitting your information!"
-        
-        customer_info.append({"fname":fname,"lname":lname,"email":email,"cnumber":cnumber,"address":address})
-        session['customer_info']=customer_info
-    # print(session)
-    print(customer_info)
-    
-    customer_info_string = ["<div>{}" "{}<br/><br/>{}<br/><br/>{}<br/><br/>{}</div>".format(i["fname"],i["lname"],i["email"],i["cnumber"],i["address"]) for i in customer_info]
-
-    ####
-    
-    #form2 = '''
-    #<form method="POST">
-    #<input type="submit" name="address" value="Confirm"/><br/>
-    #</form>
-    #'''
-    
-    message_after = []
-    if 'message_after' not in session:
-        session['message_after'] = []
-    else:
-        message_after = session['message_after']
-        
-        address=request.form.get("address")
-        # message="Thank You for submitting your information!"
-        
-        message_after.append({"message":message})
-        session['message_after']=message_after
-    # print(session)
-    print(message_after)
-    
-    
-    message_after_string = ["<div>{}</div>".format(i["message"]) for i in message_after]
-    
-    link3 = '<div> {} </div>'.format('<a href="summary" style="vertical-align:middle"><span>Proceed to Summary</span></a>')
-    
-    return html + instruc3 + required + form + "".join(customer_info_string) + "".join(message_after_string) + link3
+    return html + instruc2 + menu_title2 + menu2 + form + "".join(food_tray_string) + link7
 #-------------------------------------------------------------------------------------------------
     # Attempt to process 4th Page
     
@@ -467,8 +364,8 @@ font-family: Quicksand}
     <h1>Order Summary</h1></html>"""
     instruc4 = "<h4>Kindly check the following information</h4>"
         
-    customer_info = session['customer_info']
-    customer_info_string = ["<br/><div>Name: {} &nbsp; {}<br/>Email Address: {}<br/>Phone Number: {}<br/>Address: {}</div><br/>".format(i["fname"],i["lname"],i["email"],i["cnumber"],i["address"]) for i in customer_info]
+    logged_in = session['logged_in']
+    clerk_info_string = ["<br/><div>Clerk Name: {}<br/>Total Sales: {}<br/>Total Commission {}</div><br/>".format(i["Name"],i["Total Sales"],i["Total Commission"]) for i in logged_in]
         
     food_tray = session['food_tray']
     food_tray_string = ["<tr><td>{}</td><td>{}</td><td>{}</td></tr>".format(i["code"],i["quantity"],i["price"]) for i in food_tray]
@@ -492,7 +389,7 @@ font-family: Quicksand}
     if 'customer_wallet' not in session:
         session['customer_wallet'] = []
     else:
-        customer_info = session['customer_info']
+        customer_wallet = session['customer_wallet']
         amount=request.form.get("amount")
         method=request.form.get("method")
         
@@ -510,10 +407,9 @@ font-family: Quicksand}
         change_string = "<div> Your Change for the Order is: <b>{}</b> </div></br>".format(change)
     
     link4 = '<div> {} </div>'.format('<a href="orders">Go back to Orders</a>')
-    link5 = '<div> {} </div>'.format('<a href="cinfo">Go back to Customer Information</a>')
     link6 = '<div> {} </div>'.format('<a href="checkout" style="vertical-align:middle"><span>Proceed to Checkout</span></a>')
     
-    return html + instruc4 + "".join(customer_info_string) + "".join(food_tray_final) + total_string + wallet_form + "".join(customer_wallet_string) + "".join(change_string) + link4 + link5 + link6
+    return html + instruc4 + "".join(clerk_info_string) + "".join(food_tray_final) + total_string + wallet_form + "".join(customer_wallet_string) + "".join(change_string) + link4 + link6
 #-------------------------------------------------------------------------------------------------
     # Attempt to process 5th Page
     
@@ -531,8 +427,8 @@ def checkout():
     final_message = "<h2>Order Receipt</h2>"    
     
     
-    customer_info = session['customer_info']
-    customer_info_string = ["<br/><div>Name: <b>{}</b>&nbsp;<b>{}</b><br/><br/>Email Address: <b>{}</b><br/><br/>Phone Number: <b>{}</b><br/><br/>Address: <b>{}</b></div><br/>".format(i["fname"],i["lname"],i["email"],i["cnumber"],i["address"]) for i in customer_info]
+    logged_in = session['logged_in']
+    clerk_info_string = ["<br/><div>Clerk Name: {}<br/>Total Sales: {}<br/>Total Commission {}</div><br/>".format(i["Name"],i["Total Sales"],i["Total Commission"]) for i in logged_in]
     
     
     food_tray = session['food_tray']
@@ -553,7 +449,7 @@ def checkout():
         change = int(session['customer_wallet'][0]["Amount"]) - total_cart
         change_string = "<div> Total Change: <b>{}</b> </div><br/>".format(change)
     
-    return html + final_message + "".join(food_tray_final) + "".join(customer_wallet_string) + "".join(change_string) + "".join(customer_info_string) 
+    return html + final_message + "".join(food_tray_final) + "".join(customer_wallet_string) + "".join(change_string) + "".join(clerk_info_string) 
 
 if __name__ == '__main__':
     app.config['SESSION_TYPE'] = 'filesystem'
