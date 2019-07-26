@@ -290,13 +290,7 @@ font-family: Quicksand}
         
         checker=next((item.get('code') for item in session['food_tray'] if item["code"] == coffee_dict.products_dict[code]["name"]), False)
         checker_quan=next((item.get('quantity') for item in session['food_tray'] if item["code"] == coffee_dict.products_dict[code]["name"]), False)
-        #if checker == code:
-            #sub_total=qty+int(checker_quan)
-            #new_prc=int(sub_total)*coffee_dict.products_dict[code]["price"]
-            #for i in range(len(food_tray)):
-                #if food_tray[i]['code'] == checker:
-                    #del food_tray[i]
-                    #break
+        
         if checker == coffee_dict.products_dict[code]["name"]:
             if qty < 0 and -qty > int(checker_quan):
                 sub_total=0+int(checker_quan)
@@ -469,21 +463,17 @@ def checkout():
     <h1>Coffee Python</h1></html>"""
     final_message = "<h2>Order Receipt</h2>"    
     
-    
-    logged_in = session['logged_in']
-    clerk_info_string = ["<br/><div>Clerk Name: {}<br/>Total Sales: {}<br/>Total Commission {}</div><br/>".format(i["Name"],i["Total Sales"],i["Total Commission"]) for i in logged_in]
-    
-    
     food_tray = session['food_tray']
     food_tray_string = ["<tr><td>{}</td><td>{}</td><td>{}</td></tr>".format(i["code"],i["quantity"],i["price"]) for i in food_tray]
   
     total_cart = 0
     for i in food_tray:
         total_cart += i["price"]
-   
-    
     food_tray_final = '<table align="center"><tr><th>Code</th><th>Quantity</th><th>Price</th></tr>{}<tr><td><b>Total</b></td> <td></td><td><b>{}</b></td></tr></table><br/>'.format(food_tray_string,total_cart)
-   
+
+    logged_in = session['logged_in']
+    clerk_info_string = ["<br/><div>Clerk Name: {}<br/>Total Sales: {}<br/>Total Commission: {} pesos</div><br/>".format(i["Name"],int(i["Total Sales"])+1,int(i["Total Commission"])+(0.01*int(total_cart))) for i in logged_in]
+    
     customer_wallet_string = ["<div>Amount Paid: <b>{}</b> through <b>{}</b></div><br/>".format(i["Amount"],i["Method"]) for i in session['customer_wallet']]
 
     if bool(session['customer_wallet']) == False:
